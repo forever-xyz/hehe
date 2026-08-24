@@ -2,6 +2,7 @@ import typer
 from hehe.commands.find import find
 from hehe.commands.show import show
 from hehe.commands.diff import diff
+from hehe.commands.search import search
 
 app = typer.Typer(
     name="hehe",
@@ -21,5 +22,6 @@ def version():
 app.command("find")(find)
 app.command("show")(show)
 app.command("diff")(diff)
+app.command("search")(search)
 def main():
     app()

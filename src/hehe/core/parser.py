@@ -72,9 +72,9 @@ def parse_config_file(path: Path) -> dict[str, Any]:
     return flatten_dict(data)
 
 def _parse_yaml(path: Path) -> dict[str, Any]:
-    """解析 YAML，支持 --- 多文档配置"""
+    """解析 YAML，支持 Maven 占位符和 --- 多文档配置。"""
     content = path.read_text(encoding="utf-8-sig")
-
+    content = _normalize_yaml(content)
     documents = list(yaml.safe_load_all(content))
 
     result: dict[str, Any] = {}
@@ -148,3 +148,25 @@ def _parse_env(path: Path) -> dict:
         result[key.key.strip()] = value
 
     return result
+
+def _normalize_yaml(content: str) -> str:
+    """兼容 Maven @property@ 形式的资源占位符。"""
+    lines = []
+    for line in content.splitlines():
+
+        if ":" not in line:
+            lines.append(line)
+            continue
+
+        key, value = line.split(":", 1)
+        stripped_value = value.strip()
+
+        if (
+            stripped_value.startswith("@")
+            and stripped_value.endswith("@")
+        ):
+            line = f'{key}: "{stripped_value}"'
+
+        lines.append(line)
+
+    return "\n".join(lines)
