@@ -65,6 +65,8 @@ def scan(
                 bold=True
             )
 
+            current_file = finding.file
+
         typer.secho(
             f"  ! {finding.key}",
             fg=typer.colors.RED,

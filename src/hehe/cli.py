@@ -4,6 +4,7 @@ from hehe.commands.show import show
 from hehe.commands.diff import diff
 from hehe.commands.search import search
 from hehe.commands.scan import scan
+from hehe.commands.check import check
 
 app = typer.Typer(
     name="hehe",
@@ -25,5 +26,6 @@ app.command("show")(show)
 app.command("diff")(diff)
 app.command("search")(search)
 app.command("scan")(scan)
+app.command("check")(check)
 def main():
     app()
